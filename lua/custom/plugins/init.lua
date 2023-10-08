@@ -3,4 +3,5 @@
 --
 -- See the kickstart.nvim README for more information
 return {
+   'rose-pine/neovim', name = 'rose-pine' 
 }
