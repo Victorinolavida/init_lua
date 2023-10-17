@@ -1,5 +1,4 @@
 --[[
-
 =====================================================================
 ==================== read this before continuing ====================
 =====================================================================
@@ -43,7 +42,12 @@ p.s. you can delete this when you're done too. it's your config now :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- install package manager
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = { '*.tsx', '*.ts', '*.jsx', '*.js' },
+  command = 'silent! EslintFixAll',
+  group = vim.api.nvim_create_augroup('MyAutocmdsJavaScripFormatting', {}),
+})
+-- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -109,8 +113,8 @@ require('lazy').setup({
     },
   },
 
-  -- useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  -- Useful plugin to show you pending keybinds.
+  { 'folke/which-key.nvim',   opts = {} },
   {
     -- adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -183,7 +187,12 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'numToStr/Comment.nvim',
+   config = function ()
+  require("Comment").pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook()
+end
+  },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -243,8 +252,6 @@ vim.o.hlsearch = true
 -- Make line numbers default
 vim.wo.number = true
 
--- Enable mouse mode
-vim.o.mouse = 'a'
 
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -274,8 +281,6 @@ vim.o.completeopt = 'menuone,noselect'
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
--- [[ Basic Keymaps ]]
-
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
@@ -284,20 +289,6 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
--- SETTINGS
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
-
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-
--- This is going to get me cancelled
-vim.keymap.set("i", "<C-c>", "<Esc>")
-
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
-vim.keymap.set("n", "<leader>r", function()
-  vim.cmd("so")
-end)
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -323,6 +314,7 @@ require('telescope').setup {
 }
 
 -- Enable telescope fzf native, if installed
+require('ts_context_commentstring').setup {}
 pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
@@ -502,7 +494,7 @@ local servers = {
   },
 }
 
--- Setup neovim lua configuration
+
 require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
