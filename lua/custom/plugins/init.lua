@@ -5,6 +5,7 @@
 
 vim.opt.nu = true
 vim.opt.relativenumber = true
+vim.g.skip_ts_context_commentstring_module = true
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
@@ -88,10 +89,10 @@ vim.api.nvim_set_keymap("i", "<C-I>", 'copilot#Accept("<CR>")', { silent = true,
     ["c++"] = true,
     ["go"] = true,
     ["python"] = true,
-  }
+}
+--ts context
+-- require('ts_context_commentstring').setup {}
 
-
---ASTRO
 require'lspconfig'.astro.setup{}
 
 return {

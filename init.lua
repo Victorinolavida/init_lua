@@ -1,44 +1,6 @@
---[[
-=====================================================================
-==================== read this before continuing ====================
-=====================================================================
-
-kickstart.nvim is *not* a distribution.
-
-kickstart.nvim is a template for your own configuration.
-  the goal is that you can read every line of code, top-to-bottom, understand
-  what your configuration is doing, and modify it to suit your needs.
-
-  once you've done that, you should start exploring, configuring and tinkering to
-  explore neovim!
-
-  if you don't know anything about lua, i recommend taking some time to read through
-  a guide. one possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-
-  and then you can explore or search through `:help lua-guide`
-  - https://neovim.io/doc/user/lua-guide.html
-
-
-kickstart guide:
-
-i have left several `:help x` comments throughout the init.lua
-you should run that command and read that help section for more information.
-
-in addition, i have some `note:` items throughout the file.
-these are for you, the reader to help understand what is happening. feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-i hope you enjoy your neovim journey,
-- tj
-
-p.s. you can delete this when you're done too. it's your config now :)
---]]
--- set <space> as the leader key
--- see `:help mapleader`
---  note: must happen before plugins are required (otherwise wrong leader will be used)
+-- Set <space> as the leader key
+-- See `:help mapleader`
+--  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
@@ -189,9 +151,10 @@ require('lazy').setup({
   -- "gc" to comment visual regions/lines
   {
     'numToStr/Comment.nvim',
-   config = function ()
-  require("Comment").pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook()
-end
+    opts = {},
+    -- config = function()
+    --   require("Comment").pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook()
+    --:so end
   },
 
   -- Fuzzy Finder (files, lsp, etc)
@@ -223,6 +186,14 @@ end
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
+      'JoosepAlviste/nvim-ts-context-commentstring',
+    },
+    opts = {
+      ensure_installed = { 'astro', 'tsx', 'typescript', 'html' },
+      auto_install = true,
+      highlight = {
+        enable = true,
+      }
     },
     build = ':TSUpdate',
   },
@@ -289,6 +260,20 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
+-- SETTINGS
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+
+-- This is going to get me cancelled
+vim.keymap.set("i", "<C-c>", "<Esc>")
+
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+vim.keymap.set("n", "<leader>r", function()
+  vim.cmd("so")
+end)
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -313,6 +298,10 @@ require('telescope').setup {
   },
 }
 
+--ts context
+require('Comment').setup {
+  pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+}
 -- Enable telescope fzf native, if installed
 require('ts_context_commentstring').setup {}
 pcall(require('telescope').load_extension, 'fzf')
@@ -339,6 +328,43 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 
+
+-- KEYMAPS
+local opts = { noremap = true, silent = true }
+-- Increment/decrement
+vim.keymap.set("n", "+", "<C-a>")
+vim.keymap.set("n", "-", "<C-x>")
+
+-- Delete a word backward
+vim.keymap.set("n", "dw", "vb_d")
+
+-- Select all
+vim.keymap.set("n", "<C-a>", "gg<S-v>G")
+
+-- jumplist
+vim.keymap.set("n", "<C-m>", "<C-i>", opts)
+
+-- new tab
+vim.keymap.set("n", "te", ":tabedit", opts)
+vim.keymap.set("n", "<tab>", ":tabnext<Return>", opts)
+vim.keymap.set("n", "<s-tab>", ":tabprev<Return>", opts)
+
+-- split window
+vim.keymap.set("n", "ss", ":split<Return>", opts)
+vim.keymap.set("n", "sv", ":vsplit<Return>", opts)
+
+--move windows
+vim.keymap.set("n", "sh", "<C-w>h")
+vim.keymap.set("n", "sk", "<C-w>k")
+vim.keymap.set("n", "sj", "<C-w>j")
+vim.keymap.set("n", "sl", "<C-w>l")
+
+-- Resize windows
+vim.keymap.set("n", "<C-w><left>", "<C-w><")
+vim.keymap.set("n", "<C-w><right>", "<C-w>>")
+vim.keymap.set("n", "<C-w><up>", "<C-w>+")
+vim.keymap.set("n", "<C-w><down>", "<C-w>-")
+
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
@@ -346,7 +372,9 @@ vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
     ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim' },
-
+    context_commentstring = {
+      enable = true,
+    },
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
 
@@ -443,7 +471,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('<C-x>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
   -- Lesser used LSP functionality
   nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
