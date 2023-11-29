@@ -6,6 +6,7 @@
 vim.opt.nu = true
 vim.opt.relativenumber = true
 vim.g.skip_ts_context_commentstring_module = true
+
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
@@ -28,7 +29,7 @@ vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
-vim.opt.updatetime = 100
+vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "80"
 -- [[ Basic Keymaps ]]
@@ -47,10 +48,10 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
 -- next greatest remap ever : asbjornHaland
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
+vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
-vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
 
 -- This is going to get me cancelled
 vim.keymap.set("i", "<C-c>", "<Esc>")
@@ -71,14 +72,13 @@ vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
 
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 vim.keymap.set("n", "<leader>r", function()
-    vim.cmd("so")
+  vim.cmd("so")
 end)
 
--- copilot config
 vim.g.copilot_no_tab_map = true
 vim.api.nvim_set_keymap("i", "<C-I>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
 
-vim.g.copilot_filetypes = {
+  vim.g.copilot_filetypes = {
     ["*"] = false,
     ["javascript"] = true,
     ["typescript"] = true,
@@ -92,7 +92,8 @@ vim.g.copilot_filetypes = {
 }
 --ts context
 -- require('ts_context_commentstring').setup {}
---ASTRO
-require 'lspconfig'.astro.setup {}
+
+require'lspconfig'.astro.setup{}
+
 return {
 }
