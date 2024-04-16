@@ -75,23 +75,6 @@ vim.keymap.set("n", "<leader>r", function()
   vim.cmd("so")
 end)
 
-vim.g.copilot_no_tab_map = true
-vim.api.nvim_set_keymap("i", "<C-I>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-
-  vim.g.copilot_filetypes = {
-    ["*"] = false,
-    ["javascript"] = true,
-    ["typescript"] = true,
-    ["lua"] = false,
-    ["rust"] = true,
-    ["c"] = true,
-    ["c#"] = true,
-    ["c++"] = true,
-    ["go"] = true,
-    ["python"] = true,
-}
---ts context
--- require('ts_context_commentstring').setup {}
 
 require'lspconfig'.astro.setup{}
 
