@@ -238,7 +238,7 @@ require('lazy').setup({
 -- Set highlight on search
 vim.o.hlsearch = true
 -- Clear on pressing <Esc> in normal mode
-vim.keymap("n", "<Esc>", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Make line numbers default
 vim.wo.number = true
