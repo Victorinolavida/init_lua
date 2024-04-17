@@ -48,10 +48,10 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
 -- next greatest remap ever : asbjornHaland
-vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
-vim.keymap.set({"n", "v"}, "<leader>d", [["_d]])
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
 -- This is going to get me cancelled
 vim.keymap.set("i", "<C-c>", "<Esc>")
@@ -72,11 +72,32 @@ vim.keymap.set("n", "<leader>mr", "<cmd>CellularAutomaton make_it_rain<CR>");
 
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 vim.keymap.set("n", "<leader>r", function()
-  vim.cmd("so")
+    vim.cmd("so")
 end)
 
+-- Harpoon config
+vim.keymap.set("n", "<leader>bs", function()
+    require("harpoon.mark").add_file()
+end, { desc = "Save file in harpoon buffer" })
 
-require'lspconfig'.astro.setup{}
+vim.keymap.set("n", "<leader>bn", function()
+    require("harpoon.ui").nav_next()
+end, { desc = "Navigate next buffer" })
+
+vim.keymap.set("n", "<leader>bp", function()
+    require("harpoon.ui").nav_prev()
+end, { desc = "Navigate previus buffer" })
+
+vim.keymap.set("n", "<leader>bm", function()
+    require("harpoon.ui").toggle_quick_menu()
+end, { desc = "Toogle menu  buffer" })
+
+vim.keymap.set("n", "<leader>bd", function()
+    require("harpoon.mark").rm_file()
+end, { desc = "Delete buffer" })
+
+require 'lspconfig'.astro.setup {}
+
 
 return {
 }

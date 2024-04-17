@@ -4,6 +4,7 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+
 vim.api.nvim_create_autocmd('BufWritePre', {
   pattern = { '*.tsx', '*.ts', '*.jsx', '*.js' },
   command = 'silent! EslintFixAll',
@@ -107,14 +108,14 @@ require('lazy').setup({
     },
   },
 
-  {
-    'rose-pine/neovim',
-    name = "rose",
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme("rose-pine")
-    end
-  },
+  -- {
+  --   'rose-pine/neovim',
+  --   name = "rose",
+  --   priority = 1000,
+  --   config = function()
+  --     vim.cmd.colorscheme("rose-pine")
+  --   end
+  -- },
   -- {
   --   -- Theme inspired by Atom
   --   'navarasu/onedark.nvim',
@@ -123,7 +124,15 @@ require('lazy').setup({
   --     vim.cmd.colorscheme 'onedark'
   --   end,
   -- },
-
+  {
+    "folke/tokyonight.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = {},
+    config = function()
+      vim.cmd.colorscheme 'tokyonight-storm'
+    end,
+  },
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -228,6 +237,8 @@ require('lazy').setup({
 
 -- Set highlight on search
 vim.o.hlsearch = true
+-- Clear on pressing <Esc> in normal mode
+vim.keymap("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Make line numbers default
 vim.wo.number = true
@@ -330,11 +341,12 @@ vim.keymap.set('n', '<leader>/', function()
   })
 end, { desc = '[/] Fuzzily search in current buffer' })
 
-vim.keymap.set('n', '<leader>sk', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
+vim.keymap.set('n', '<leader>gf', require('telescope.builtin').git_files, { desc = 'Search [G]it [F]iles' })
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<leader>sk', require('telescope.builtin').keymaps, { desc = '[S]earch [K]eymaps' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sr', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
 
@@ -501,7 +513,7 @@ end
 require('nvim-ts-autotag').setup()
 
 require("lspconfig").emmet_language_server.setup({
-  filetypes = { "astro","css", "eruby", "html", "tmpl", "javascript", "javascriptreact", "less", "sass", "scss", "pug", "typescriptreact" },
+  filetypes = { "astro", "css", "eruby", "html", "tmpl", "javascript", "javascriptreact", "less", "sass", "scss", "pug", "typescriptreact" },
   -- Read more about this options in the [vscode docs](https://code.visualstudio.com/docs/editor/emmet#_emmet-configuration).
   -- **Note:** only the options listed in the table are supported.
   init_options = {
