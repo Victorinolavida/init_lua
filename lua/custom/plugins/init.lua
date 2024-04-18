@@ -75,26 +75,33 @@ vim.keymap.set("n", "<leader>r", function()
     vim.cmd("so")
 end)
 
--- Harpoon config
-vim.keymap.set("n", "<leader>bs", function()
-    require("harpoon.mark").add_file()
-end, { desc = "Save file in harpoon buffer" })
+ -- -- Harpoon config
+-- local harpoon = require("harpoon")
+-- -- REQUIRE
+-- harpoon:setup()
+-- -- REQUIRE
 
-vim.keymap.set("n", "<leader>bn", function()
-    require("harpoon.ui").nav_next()
-end, { desc = "Navigate next buffer" })
-
-vim.keymap.set("n", "<leader>bp", function()
-    require("harpoon.ui").nav_prev()
-end, { desc = "Navigate previus buffer" })
-
-vim.keymap.set("n", "<leader>bm", function()
-    require("harpoon.ui").toggle_quick_menu()
-end, { desc = "Toogle menu  buffer" })
-
-vim.keymap.set("n", "<leader>bd", function()
-    require("harpoon.mark").rm_file()
-end, { desc = "Delete buffer" })
+-- vim.keymap.set("n", "<leader>ba", function () harpoon:list():add() end)
+-- vim.keymap.set("n", "<leader>bm", function () harpoon.ui:toggle_quick_menu() end)
+-- vim.keymap.set("n", "<leader>bs", function()
+--     require("harpoon.mark").add_file()
+-- end, { desc = "Save file in harpoon buffer" })
+--
+-- vim.keymap.set("n", "<leader>bn", function()
+--     require("harpoon.ui").nav_next()
+-- end, { desc = "Navigate next buffer" })
+--
+-- vim.keymap.set("n", "<leader>bp", function()
+--     require("harpoon.ui").nav_prev()
+-- end, { desc = "Navigate previus buffer" })
+--
+-- vim.keymap.set("n", "<leader>bm", function()
+--     require("harpoon.ui").toggle_quick_menu()
+-- end, { desc = "Toogle menu  buffer" })
+--
+-- vim.keymap.set("n", "<leader>bd", function()
+--     require("harpoon.mark").rm_file()
+-- end, { desc = "Delete buffer" })
 
 require 'lspconfig'.astro.setup {}
 
