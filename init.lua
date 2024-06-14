@@ -1,3 +1,12 @@
+-- start telescope when open nvim
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    if vim.fn.argc() == 0 then
+      require('telescope.builtin').find_files()
+    end
+  end
+
+})
 
 --require 'lspconfig'.astro.setup {}
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -63,7 +72,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',   opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -362,7 +371,20 @@ local on_attach = function(_, bufnr)
     vim.lsp.buf.format()
   end, { desc = 'Format current buffer with LSP' })
 end
-require('nvim-ts-autotag').setup()
+require('nvim-ts-autotag').setup({})
+--
+-- CONFIGURATION GO----
+require('lspconfig').gopls.setup({
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+      gofumpt = true,
+    }
+  }
+})
 
 require("lspconfig").emmet_language_server.setup({
   filetypes = { "astro", "css", "eruby", "html", "tmpl", "javascript", "javascriptreact", "less", "sass", "scss", "pug", "typescriptreact" },
